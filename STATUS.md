@@ -28,9 +28,31 @@ Code: cf_pilot/. Config: config/pilot.json. Database: data/pilot.sqlite. Respons
 
 Run python -m unittest discover -s tests -v for tests. Run python -m cf_pilot collect --config config/pilot.json to resume/reuse the frozen dataset. Run python -m cf_pilot check --run-id pilot-001 for a fresh integrity audit.
 
+## Contest strategy implementation
+
+The user requested a Git checkpoint before continuing. Created repository D:\pilot and committed the original collector/docs/tests as 9c2df27 (Checkpoint tested Codeforces pilot collector). Global SSH commit signing failed; this checkpoint used a command-local signing override, without changing Git settings. Generated data and reports remain local and ignored by Git.
+
+Implemented a second sampling strategy: full target-contest submission census, 20 preceding standard CF Div. 2 rounds within 180 days, historical participation coverage for all eligible target participants, and a reproducible development sample of up to 1,000. College/country are not collected. The development sample uses 70/20/10 history-coverage weights, with shortages redistributed and inclusion probabilities recorded.
+
+33 automated tests passed after the selection and paging fixes. The original pilot-001 still passes its live-data integrity audit with unchanged counts. Contest pagination is tested for clipped short pages, missing boundary anchors, added practice submissions, interrupted historical collection, exclusions, future context, population/sample completeness, and offline reruns.
+
+Live run contest-001 failed before downloading target submissions because identical-duration matching could not supply 20 earlier rounds. Its failed state and first response are retained. The revised standard_div2_v1 policy permits varying durations and excludes combined Div. 1 + Div. 2 / explicitly unrated rounds. Duration will need to be accounted for in later timing features.
+
+Live run contest-002 completed and passed its final audit: target 2269 (Codeforces Round 1124, Div. 2) and its 20 preceding comparable rounds. All 21 contest jobs exhausted their ID-bounded snapshots. Full archived traversals contain 2,306,696 distinct submission records across these contests, including practice and other excluded participation.
+
+The target snapshot contains 77,434 submission records, 21,121 individual-author candidate sessions and 10,344 eligible official participants with 41,942 official submissions. New practice submissions shifted a historical offset page during the first attempt. Collection failed visibly, then resumed after an ID-anchor realignment fix. The previous boundary must exist in the response; prefixes are deduplicated and missing anchors still fail. Each traversal preserves the snapshot bounded by its first submission ID. No misconduct labels have been inferred from missing standings or activity patterns.
+
+Final coverage: 4,059 regular participants (at least five earlier rounds), 4,856 limited-history participants (one to four), and 1,429 with none observed in the panel. Development sample: 1,000, comprising 700 regular, 200 limited and 100 none_observed. Coverage and sampling probabilities are reported for all 10,344 eligible participants. Earlier account history outside the panel is not claimed complete; skill stratification and per-user rating retrieval are not yet implemented.
+
+Archived successful responses: 285. Three transient HTTP/API attempts failed and were retried successfully. Recorded page realignments: 5. Conflicting normalized snapshots: 0. Minimum observed request-start interval: 2.100101 seconds. Normalized submission records: 107,666, comprising the complete target snapshot plus eligible earlier submissions for sampled participants. Earlier raw pages are preserved in full.
+
+Actual completed-run rerun: zero network requests or attempts added; unchanged table counts, response manifest, coverage CSV, development sample CSV and label worksheet. Verification evidence: reports/contest-002/rerun_verification.json. The final collection audit passed with no issues. All 21,121 candidate labels remain unknown; no models have been trained.
+
+Reports: reports/contest-002/. Commands: python -m cf_pilot collect --config config/contest.json and python -m cf_pilot check --run-id contest-002. User-facing result, audit, development sample and rerun evidence were exported to C:\Users\Om Bhanushali\Documents\Codex\2026-10-10\pro\outputs.
+
 ## Next work
 
-This random leaderboard sample has thin participation in the selected rounds. Before training, expand collection to a more active cohort and more finished rounds, and add a comparison population. Six target sessions are sufficient to exercise the collector, not model training. Preserve pilot-001 as the tested engineering snapshot.
+This original random leaderboard sample has thin participation in the selected rounds. The completed contest strategy supersedes its sampling. Preserve pilot-001 as the tested engineering snapshot. Next establish independent session-label evidence and an explicit feature allowlist, then repeat across additional target contests for temporal and participant-held-out evaluation.
 
 No misconduct labels or models have been inferred/trained. All labels are unknown. Evidence-backed session labels, feature allowlists and frozen temporal/user partitions remain required. The user's next useful input is independently checkable candidate cases, specified by handle, contest and evidence source; collection itself needs no additional credentials.
 

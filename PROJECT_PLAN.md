@@ -2,7 +2,13 @@
 
 ## Fixed scope
 
-Analyse completed Codeforces participant-contest sessions. A college leaderboard selects an initial cohort; organisation is not a model input. Each target session is available in full. Output is a recommendation for human review of that session, not a permanent judgement about the participant.
+Analyse completed Codeforces participant-contest sessions. The active sampling strategy collects a complete target contest, then the 20 preceding comparable contests completed strictly before it, within 180 days. College and country are not collected. Each target session is available in full. Output is a recommendation for human review of that session, not a permanent judgement about the participant. The original college pilot is preserved as pilot-001.
+
+The target is the latest completed standard CF contest matching Div. 2, at least seven days old, selected without inspecting suspected behaviour. Earlier rounds match the name filter; combined Div. 1 + Div. 2 and explicitly unrated rounds are excluded. Duration may vary and is recorded for later timing normalization. This is a transparent comparability rule, not proof of equal difficulty. A fixed target ID may override recency while retaining maturity checks. The full raw submission census includes excluded participation types; eligibility is checked locally. Selection policy is versioned as standard_div2_v1.
+
+Historical coverage is measured for every eligible target participant: regular means at least five of the 20 earlier rounds, limited means one to four, none_observed means zero in this panel. No-history does not imply a new account. A deterministic development sample of up to 1,000 uses group weights 70/20/10 with shortages redistributed. Record per-group inclusion probabilities and preserve everyone outside the sample. These weights prioritize history-rich development without estimating misconduct prevalence.
+
+Archive all earlier raw pages; store compact participation facts for the target population, then normalize earlier submission sequences only for the development sample. No per-user calls are required for this first expansion. Training still requires evidence labels and multiple target contests with frozen temporal and participant partitions.
 
 ## Work order
 

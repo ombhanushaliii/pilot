@@ -7,6 +7,7 @@ import sys
 from .api import Client
 from .audit import audit_run, write_reports
 from .collect import collect, load_config
+from .contest_collect import collect_contest, build_contest_sessions
 from .sessions import build_sessions
 from .store import Store
 
@@ -31,15 +32,22 @@ def main(argv=None):
             client = Client(store, run_id, config["request_interval_seconds"],
                             config["request_timeout_seconds"], config["max_attempts"])
             error = None
+            contest_mode = config.get("sampling_strategy") == "contest"
+            def build():
+                if contest_mode:
+                    build_contest_sessions(store, run_id, config)
+                else:
+                    build_sessions(store, run_id, config["history_lookback_days"])
             try:
-                complete = collect(client, config, progress=lambda text: print(text, flush=True))
-                build_sessions(store, run_id, config["history_lookback_days"])
+                collector = collect_contest if contest_mode else collect
+                complete = collector(client, config, progress=lambda text: print(text, flush=True))
+                build()
                 status = "complete" if complete else "incomplete"
             except (Exception, KeyboardInterrupt) as e:
                 error = str(e) or "Interrupted by user"
                 status = "failed" if not isinstance(e, KeyboardInterrupt) else "interrupted"
                 # Build whatever was successfully collected, but mark the run incomplete.
-                build_sessions(store, run_id, config["history_lookback_days"])
+                build()
             store.db.execute("UPDATE runs SET status=?,error=? WHERE run_id=?", (status, error, run_id))
             store.db.commit()
             report = audit_run(store, run_id)

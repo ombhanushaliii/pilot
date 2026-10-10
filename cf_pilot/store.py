@@ -72,6 +72,21 @@ CREATE TABLE IF NOT EXISTS labels (
  confidence TEXT, reviewer_notes TEXT, PRIMARY KEY(run_id, contest_id, handle)
 );
 CREATE INDEX IF NOT EXISTS submission_lookup ON submissions(run_id, handle, created_at);
+CREATE TABLE IF NOT EXISTS contest_panel (
+ run_id TEXT NOT NULL, contest_id INTEGER NOT NULL, role TEXT NOT NULL,
+ position INTEGER NOT NULL, PRIMARY KEY(run_id, contest_id)
+);
+CREATE TABLE IF NOT EXISTS panel_participation (
+ run_id TEXT NOT NULL, contest_id INTEGER NOT NULL, handle TEXT NOT NULL COLLATE NOCASE,
+ PRIMARY KEY(run_id, contest_id, handle)
+);
+CREATE TABLE IF NOT EXISTS participant_coverage (
+ run_id TEXT NOT NULL, contest_id INTEGER NOT NULL, handle TEXT NOT NULL COLLATE NOCASE,
+ prior_contest_count INTEGER NOT NULL, history_group TEXT NOT NULL,
+ selected INTEGER NOT NULL, selection_probability REAL NOT NULL,
+ PRIMARY KEY(run_id, contest_id, handle)
+);
+CREATE INDEX IF NOT EXISTS panel_participation_lookup ON panel_participation(run_id, handle, contest_id);
 """
 
 

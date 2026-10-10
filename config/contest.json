@@ -1,0 +1,20 @@
+{
+  "sampling_strategy": "contest",
+  "selection_policy": "standard_div2_v1",
+  "run_id": "contest-002",
+  "target_contest_id": null,
+  "contest_name_contains": "Div. 2",
+  "min_contest_age_days": 7,
+  "max_contest_age_days": 365,
+  "history_lookback_days": 180,
+  "history_contest_count": 20,
+  "regular_min_contests": 5,
+  "sample_size": 1000,
+  "seed": 736,
+  "sample_weights": {"regular": 0.7, "limited": 0.2, "none_observed": 0.1},
+  "page_size": 10000,
+  "max_contest_pages": 500,
+  "request_interval_seconds": 2.1,
+  "request_timeout_seconds": 60,
+  "max_attempts": 4
+}

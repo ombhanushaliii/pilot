@@ -3,7 +3,8 @@
 This is a reinforcement learning course mini project for post-contest Codeforces review. Read PROJECT_PLAN.md and STATUS.md when present before continuing project work.
 
 - Analyse completed participant-contest sessions. The complete target contest is available at review time.
-- Organisation/college is only a sampling source. It must not become a model observation.
+- The active strategy samples a complete contest, without collecting college/country. The older organisation pilot remains a reproducible checkpoint. Organisation/college must never become a model observation.
+- Coverage groups refer only to the frozen earlier-contest panel. Missing or incomplete history is never silently classified as no history. Preserve the full target population outside the development sample.
 - Collection currently uses the Python standard library. Run it from this directory.
 - Preserve raw responses, request provenance, checkpoints and dataset versions. Do not hide incomplete collection or change a frozen run's settings.
 - Unusual behaviour and administrative outcomes do not automatically establish misconduct labels. Unknown labels remain unknown until independently reviewed.

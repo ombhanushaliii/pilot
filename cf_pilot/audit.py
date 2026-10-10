@@ -26,14 +26,24 @@ def audit_run(store, run_id, verify_raw=True):
     config = json.loads(run["config_json"])
     handles = [row[0].casefold() for row in db.execute("SELECT handle FROM cohort WHERE run_id=? AND selected=1", (run_id,))]
     contest_ids = [row[0] for row in db.execute("SELECT contest_id FROM contests WHERE run_id=? AND selected=1", (run_id,))]
-    expected_jobs = {f"history:{handle}" for handle in handles} | {
-        f"session:{handle}:{identifier}" for handle in handles for identifier in contest_ids}
+    contest_mode = config.get("sampling_strategy") == "contest"
+    if contest_mode:
+        from .contest_audit import audit_population
+        panel = list(db.execute("SELECT contest_id FROM contest_panel WHERE run_id=?", (run_id,)))
+        expected_jobs = {f"contest:{row[0]}" for row in panel}
+        expected_sessions = db.execute("SELECT count(*) FROM cohort WHERE run_id=?", (run_id,)).fetchone()[0]
+        expected_contests = 1
+        population = audit_population(store, run_id, config, issues)
+    else:
+        expected_jobs = {f"history:{handle}" for handle in handles} | {
+            f"session:{handle}:{identifier}" for handle in handles for identifier in contest_ids}
+        expected_sessions = len(handles) * len(contest_ids)
+        expected_contests = len(config["contest_ids"]) if config["contest_ids"] else config["contest_count"]
     missing_jobs = sorted(expected_jobs - {job["job_key"] for job in jobs})
     if missing_jobs:
         issues.append({"code": "missing_collection_jobs", "jobs": missing_jobs})
-    if len(sessions) != len(handles) * len(contest_ids):
-        issues.append({"code": "missing_session_candidates", "expected": len(handles) * len(contest_ids), "actual": len(sessions)})
-    expected_contests = len(config["contest_ids"]) if config["contest_ids"] else config["contest_count"]
+    if len(sessions) != expected_sessions:
+        issues.append({"code": "missing_session_candidates", "expected": expected_sessions, "actual": len(sessions)})
     if len(contest_ids) != expected_contests:
         issues.append({"code": "contest_selection_incomplete", "expected": expected_contests, "actual": len(contest_ids)})
     if db.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
@@ -61,13 +71,15 @@ def audit_run(store, run_id, verify_raw=True):
     # Model training is intentionally not implemented in this milestone.
     return {
         "run_id": run_id, "status": run["status"], "collection_checks_passed": not issues,
-        "scope": "targeted cohort pilot; not a complete contest participant census",
+        "scope": "available target-contest submission census and fixed earlier-contest panel" if contest_mode else "targeted cohort pilot; not a complete contest participant census",
+        **({"population": population} if contest_mode else {}),
         "counts": counts, "contests": [{"id": x["contest_id"], **json.loads(x["payload_json"])} for x in selected],
         "history_stop_reasons": dict(Counter(json.loads(job["detail"] or "{}").get("stop_reason")
                                              for job in jobs if job["job_key"].startswith("history:"))),
         "exclusions": dict(Counter(row["exclusion_reason"] for row in sessions if not row["eligible"])),
         "submission_sessions_absent_from_standings": missing, "issues": issues,
-        "history_note": "Past verdicts are snapshots retrieved today. A lookback-boundary stop is documented, not proof that every historical record exists.",
+        "history_note": ("Coverage means participation in the fixed earlier-contest panel, not complete account history. All panel pages are exhausted. Earlier normalized submissions cover only the development sample; full raw pages are preserved."
+                         if contest_mode else "Past verdicts are snapshots retrieved today. A lookback-boundary stop is documented, not proof that every historical record exists."),
         "training_ready": False, "training_blocker": "Evidence labels and frozen train/validation/test partitions are not established.",
     }
 
@@ -84,7 +96,7 @@ def write_reports(store, run_id, output: Path, report):
         writer.writeheader()
         writer.writerows(dict(row) for row in rows)
     worksheet = output / "labels_for_review.csv"
-    if not worksheet.exists():
+    if not worksheet.exists() and report["status"] == "complete":
         with worksheet.open("w", newline="", encoding="utf-8") as f:
             columns = ["run_id", "contest_id", "handle", "label", "evidence_url", "evidence_type", "confidence", "reviewer_notes"]
             writer = csv.DictWriter(f, fieldnames=columns)
@@ -96,3 +108,12 @@ def write_reports(store, run_id, output: Path, report):
     manifest_bytes = json.dumps(response_manifest, sort_keys=True, indent=2).encode()
     (output / "response_manifest.json").write_bytes(manifest_bytes)
     (output / "response_manifest.sha256").write_text(hashlib.sha256(manifest_bytes).hexdigest() + "\n", encoding="ascii")
+    if "population" in report:
+        coverage = [dict(row) for row in store.db.execute("SELECT * FROM participant_coverage WHERE run_id=? ORDER BY history_group,handle", (run_id,))]
+        columns = ["run_id", "contest_id", "handle", "prior_contest_count", "history_group", "selected", "selection_probability"]
+        for name, entries in [("participant_coverage.csv", coverage), ("development_sample.csv", [x for x in coverage if x["selected"]])]:
+            with (output / name).open("w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=columns)
+                writer.writeheader()
+                writer.writerows(entries)
+        (output / "contest_panel.json").write_text(json.dumps(report["population"]["panel"], indent=2, ensure_ascii=False), encoding="utf-8")

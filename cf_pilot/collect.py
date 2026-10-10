@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import re
 
-from .api import CollectionError
+from .api import CollectionError, request_key
 from .cohort import parse_organization_page, select_sample, validate_organization_url
 from .store import canonical
 
@@ -22,6 +22,9 @@ DEFAULTS = {
 
 def load_config(path: Path):
     supplied = json.loads(path.read_text(encoding="utf-8"))
+    if supplied.get("sampling_strategy") == "contest":
+        from .contest_collect import validate_config
+        return validate_config(supplied)
     unknown = set(supplied) - set(DEFAULTS)
     if unknown:
         raise ValueError(f"Unknown configuration keys: {sorted(unknown)}")
@@ -83,7 +86,8 @@ def choose_contests(contests, rating_events, config, as_of):
     return sorted(selected, key=lambda x: x["startTimeSeconds"])
 
 
-def collect_pages(client, job_key, method, params, page_size, max_pages, cutoff=None):
+def collect_pages(client, job_key, method, params, page_size, max_pages, cutoff=None,
+                  item_sink=None, exhaust_on_empty=False, progress=None):
     store, run_id = client.store, client.run_id
     job = store.job(run_id, job_key)
     if job["status"] == "complete":
@@ -91,13 +95,21 @@ def collect_pages(client, job_key, method, params, page_size, max_pages, cutoff=
     index, pages = job["next_from"], job["pages"]
     detail = json.loads(job["detail"] or "{}")
     previous_oldest = detail.get("oldest_id")
+    if exhaust_on_empty and pages and "highest_id" not in detail:
+        first_key = request_key("https://codeforces.com/api/" + method,
+                                params | {"from": 1, "count": page_size})
+        body = store.cached(run_id, first_key)
+        if body is None:
+            raise CollectionError("Missing first-page archive for a resumed contest snapshot")
+        first_page = require_list(json.loads(body)["result"], method)
+        detail["highest_id"] = first_page[0]["id"] if first_page else None
     while pages < max_pages:
         try:
             items, key = client.call(method, **params, **{"from": index, "count": page_size})
             require_list(items, method)
             for item in items:
                 authors = {member.get("handle", "").casefold() for member in item.get("author", {}).get("members", [])}
-                if params.get("handle", "").casefold() not in authors:
+                if "handle" in params and params["handle"].casefold() not in authors:
                     raise CollectionError("Submission author does not match the requested handle")
                 if method == "contest.status" and item.get("contestId") != params["contestId"]:
                     raise CollectionError("Submission contest does not match the requested contest")
@@ -106,11 +118,26 @@ def collect_pages(client, job_key, method, params, page_size, max_pages, cutoff=
                 raise CollectionError("Malformed submission IDs")
             if any(left <= right for left, right in zip(ids, ids[1:])):
                 raise CollectionError("Submission page is not in strictly decreasing ID order")
+            returned_count = len(items)
+            realigned = False
+            if previous_oldest is not None and items and ids[0] != previous_oldest:
+                if not exhaust_on_empty or previous_oldest not in ids:
+                    raise CollectionError("Pagination overlap changed and anchor is missing; possible missing submissions")
+                # New practice submissions can shift offset pages forward. When
+                # the previous boundary still exists, discard the repeated
+                # prefix and advance by the physical response size. Never infer
+                # continuity across a missing anchor.
+                offset = ids.index(previous_oldest)
+                items, ids = items[offset:], ids[offset:]
+                realigned = True
             if previous_oldest is not None and len(items) == page_size and ids[-1] >= previous_oldest:
                 raise CollectionError("Pagination made no progress; possible repeated or shifted page")
-            store.ingest_submissions(run_id, key, items)
+            if item_sink is None:
+                store.ingest_submissions(run_id, key, items)
+            else:
+                item_sink(items, key)
             pages += 1
-            complete = len(items) < page_size
+            complete = not items if exhaust_on_empty else len(items) < page_size
             # user.status is documented as sorted by ID, not timestamp. Require
             # two consecutive old pages before stopping at a history cutoff.
             old_page = bool(items) and cutoff is not None and all(
@@ -118,12 +145,18 @@ def collect_pages(client, job_key, method, params, page_size, max_pages, cutoff=
             consecutive_old = detail.get("old_pages", 0) + 1 if old_page else 0
             if consecutive_old >= 2:
                 complete = True
+            unique_items = detail.get("unique_items", 0) + len(items) - int(bool(items) and previous_oldest is not None)
             detail = {"oldest_id": ids[-1] if ids else previous_oldest,
+                      "highest_id": detail.get("highest_id", ids[0] if ids else None),
+                      "overlap_realignments": detail.get("overlap_realignments", 0) + int(realigned),
+                      "unique_items": unique_items,
                       "old_pages": consecutive_old, "cutoff": cutoff,
-                      "stop_reason": "exhausted" if len(items) < page_size else "lookback_boundary" if complete else None}
-            next_index = index + max(1, len(items) - 1)  # One-record overlap.
+                      "stop_reason": "exhausted" if complete and not consecutive_old >= 2 else "lookback_boundary" if complete else None}
+            next_index = index + max(1, returned_count - 1)  # One-record overlap in the physical page.
             store.update_job(run_id, job_key, next_index, "complete" if complete else "collecting",
                              pages, canonical(detail))
+            if progress:
+                progress(f"{job_key}: page {pages}, {unique_items:,} distinct submissions archived" + ("; exhausted" if complete else ""))
             if complete:
                 return True
             previous_oldest, index = detail["oldest_id"], next_index
