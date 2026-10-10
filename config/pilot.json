@@ -1,0 +1,19 @@
+{
+  "run_id": "pilot-001",
+  "organization_url": "https://codeforces.com/ratings/organization/5276",
+  "sample_size": 24,
+  "seed": 736,
+  "contest_count": 3,
+  "contest_ids": [],
+  "contest_name_contains": "Div. 2",
+  "min_contest_age_days": 7,
+  "max_contest_age_days": 365,
+  "history_lookback_days": 180,
+  "page_size": 1000,
+  "max_history_pages": 5,
+  "max_session_pages": 10,
+  "request_interval_seconds": 2.1,
+  "request_timeout_seconds": 40,
+  "max_attempts": 4
+}
+
