@@ -52,6 +52,8 @@ Reports: reports/contest-002/. Commands: python -m cf_pilot collect --config con
 
 ## Next work
 
+On 10 October 2026, recorded the verified sample-level inventory in DATA_INVENTORY.md and specified the next milestone in PRETRAINING_PLAN.md. The 1,000 sampled participants have 4,286 official target submissions and 30,232 eligible earlier submissions (34,518 official records total). These documentation additions do not implement or train any model. The immediate work is a tested feature builder, evidence register and validated label-import workflow, followed by a review-feasibility audit and frozen evaluation partitions. Do not replace missing outcomes with timing-based labels or suspicion-score rewards.
+
 This original random leaderboard sample has thin participation in the selected rounds. The completed contest strategy supersedes its sampling. Preserve pilot-001 as the tested engineering snapshot. Next establish independent session-label evidence and an explicit feature allowlist, then repeat across additional target contests for temporal and participant-held-out evaluation.
 
 No misconduct labels or models have been inferred/trained. All labels are unknown. Evidence-backed session labels, feature allowlists and frozen temporal/user partitions remain required. The user's next useful input is independently checkable candidate cases, specified by handle, contest and evidence source; collection itself needs no additional credentials.
