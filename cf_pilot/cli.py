@@ -10,6 +10,7 @@ from .collect import collect, load_config
 from .contest_collect import collect_contest, build_contest_sessions
 from .sessions import build_sessions
 from .store import Store
+from .feature_cli import add_commands, dispatch
 
 
 def main(argv=None):
@@ -22,9 +23,12 @@ def main(argv=None):
     check = commands.add_parser("check", help="Verify an existing dataset and refresh reports")
     check.add_argument("--run-id", default="pilot-001")
     commands.add_parser("status", help="List run state and incomplete jobs")
+    add_commands(commands)
     args = parser.parse_args(argv)
     store = Store(args.data_dir)
     try:
+        if args.command in {"features", "review-export", "review-import", "review-check"}:
+            return dispatch(store, args)
         if args.command == "collect":
             config = load_config(args.config)
             run_id = config["run_id"]

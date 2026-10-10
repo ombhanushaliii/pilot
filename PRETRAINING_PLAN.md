@@ -53,7 +53,7 @@ Implement Q-learning, SARSA and DQN under matched observations, action masks and
 
 ## Current status
 
-This file is the agreed next-work specification, not an implemented feature/review/training pipeline. Collection is committed and audited. All labels remain unknown and training has not started. The immediate implementation should produce a feature report, an evidence register and a validated label-import workflow; then the first review batch determines whether detection training is supportable.
+The first feature and review pipeline is now implemented and verified; see FEATURES_AND_REVIEW.md and STATUS.md. timing_panel_v1 contains 1,000 development rows, while verdict statistics remain separate diagnostics. A 100-session random review register, submission context and validated label import are available. All real labels remain unknown and training has not started. The review-feasibility audit now determines whether reliable outcomes can support detection training, followed by additional target contests and frozen evaluation partitions. Later supervised/RL stages here remain specifications.
 
 ## Primary technical references
 

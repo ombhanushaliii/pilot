@@ -62,7 +62,7 @@ The API can remove or alter data before it is first downloaded. This collector p
 - `response_manifest.json` and `.sha256`: archived response identities and checksums.
 - `labels_for_review.csv`: unknown labels with fields for evidence and review notes. Existing worksheets are never overwritten.
 
-Editing the label worksheet currently does not update SQLite. Validated label import is a subsequent milestone.
+The legacy label worksheet is preserved for earlier notes. The new evidence register supports validated imports; see FEATURES_AND_REVIEW.md. Editing either CSV does not automatically update SQLite.
 
 Exit code 0 means collection checks passed for this targeted run. Exit code 2 means a failure, incomplete pagination or integrity issue. Collection completion does not mean training readiness.
 
@@ -71,3 +71,14 @@ Exit code 0 means collection checks passed for this targeted run. Exit code 2 me
 Offline tests cover sidebar exclusion, reproducible sampling, cache reuse, request spacing, bounded failures, page overlap, restart, checksum corruption, changing snapshots, eligibility, unknown labels and exclusion of future contest context. Temporary test databases are created and removed only within this project's work directory.
 
 Next work: audit contest population coverage, establish evidence-backed session labels and explicit presumed negatives, repeat across multiple target contests, build numerical features, freeze temporal/user partitions, and then implement supervised baselines and the RL environment. Never convert unusual timing, SKIPPED, absent standings, college membership or rating reversals directly into cheating labels.
+
+## Offline features and evidence review
+
+```powershell
+python -m cf_pilot features --run-id contest-002
+python -m cf_pilot review-export --run-id contest-002 --limit 100
+python -m cf_pilot review-import --run-id contest-002 --input reports/contest-002/evidence_register.csv
+python -m cf_pilot review-check --run-id contest-002
+```
+
+The feature report uses a versioned predictor allowlist and checks raw integrity, official eligibility and strictly earlier panel history. Verdict statistics remain separate diagnostics. Review import defaults to validation only; --apply explicitly records reviewed evidence and updates labels. Untouched unknown rows cannot overwrite labels. Existing review files are never overwritten. Read FEATURES_AND_REVIEW.md for definitions, limitations and review requirements.

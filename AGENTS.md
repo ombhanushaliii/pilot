@@ -11,5 +11,5 @@ This is a reinforcement learning course mini project for post-contest Codeforces
 - Earlier behavioural context must predate the target contest. Future records cannot influence earlier features.
 - Keep manual label worksheets intact when refreshing reports.
 - Run python -m unittest discover -s tests -v after relevant changes to collection/session logic.
-- The current milestone is collection and integrity. Training follows evidence-label and train/validation/test audits.
+- Collection integrity and the first feature/review workflow are implemented. The current task is evidence feasibility and evaluation design. Training follows evidence-label and train/validation/test audits.
 - Record concrete completed work and unresolved issues in STATUS.md. Do not claim tests or live checks that were not run.
