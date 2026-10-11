@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "run_id": "source-browser-export-001",
+  "request_interval_seconds": 7,
+  "timeout_seconds": 30,
+  "min_free_mb": 1024,
+  "max_process_rss_mb": 1000,
+  "submissions": [
+    {
+      "contest_id": 2211,
+      "submission_id": 368575830,
+      "expected_handle": "Thinkin",
+      "purpose": "unverified_evidence_lead"
+    },
+    {
+      "contest_id": 2211,
+      "submission_id": 368565363,
+      "expected_handle": "deepsr2003",
+      "purpose": "unverified_evidence_lead"
+    },
+    {
+      "contest_id": 2211,
+      "submission_id": 368548267,
+      "expected_handle": "codelearner41",
+      "purpose": "unverified_evidence_lead"
+    },
+    {
+      "contest_id": 2269,
+      "submission_id": 392176110,
+      "expected_handle": "adityasinha123",
+      "purpose": "ordinary_comparison_unknown"
+    },
+    {
+      "contest_id": 2269,
+      "submission_id": 392176177,
+      "expected_handle": "impbz",
+      "purpose": "ordinary_comparison_unknown"
+    }
+  ]
+}

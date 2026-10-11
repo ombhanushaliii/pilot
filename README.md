@@ -1,84 +1,62 @@
-# Codeforces post contest pilot
+# Codeforces Post-Contest Review Pilot
 
-Milestone 1 collects completed contest submissions and earlier participant histories for an RL course project. It builds an auditable dataset and leaves all labels unknown. Model training follows the evidence-label and split audit.
+An RL course project that analyses completed Codeforces contests and prioritizes suspicious submission patterns for human review. The planned comparison is Q-learning, SARSA and DQN against rules and supervised baselines.
 
-Python 3.11 or newer is sufficient. Public collection uses the standard library and needs no API key or package installation.
+The current prototype collects data, builds behavioural features and supports evidence review. Model training has not started, and all misconduct labels remain unknown.
 
-## Commands in PowerShell
+## How we collect data
+
+**Submission metadata comes from the official public API.** No API key is needed for public collection. Requests are sequential, at least 2.1 seconds apart, with caching, bounded retries, checksums and interruption/resume support. Failed or incomplete collection stays visible.
+
+The active workflow starts with a completed standard Div. 2 contest and downloads its submissions and standings. It then collects the 20 preceding comparable contests within 180 days, finishing strictly before the target starts. Practice, virtual, team and out-of-competition records are retained separately from eligible individual contest sessions.
+
+Participants are grouped by their participation in that earlier panel: regular (5+ contests), limited (1–4) and none observed (0). A deterministic 1,000-person development sample uses 70/20/10 group weights. The complete target population remains available for coverage checks. College and country are excluded from this strategy and model observations.
+
+**Source code is collected separately for specific evidence cases.** We currently use pages opened normally in an authenticated browser: a bookmarklet exports the loaded source and submission details, or a manually saved HTML page is imported offline. Identity checks and hashes accompany every archived source. Failed attempts are relevant, so collection is not restricted to accepted submissions.
+
+Playwright source collection was attempted, but automated browser startup failed in the agent environment and manual verification looped at Cloudflare in the separate browser profile. Unattended source scraping has not been validated. The existing Helium session can view sources, and the first manually saved page has been imported successfully. No challenge bypass is implemented.
+
+## Progress
+
+| Area | Current status |
+| --- | --- |
+| Contest collection | Round 1124, contest 2269, plus 20 earlier contests |
+| Population and sample | 10,344 eligible target participants; 1,000 sampled |
+| Sampled submission records | 4,286 target + 30,232 earlier = 34,518 |
+| Features and review | Timing/history features, predictor allowlist and validated evidence register |
+| Source feasibility | One saved HTML source imported; exporter corrected for plain-text submission IDs |
+| Training and evaluation | Pending reviewed labels, more target contests and frozen data splits |
+| Tests | 67 automated tests passing |
+
+## Run locally
+
+Python 3.11+ is sufficient for API collection, feature generation and offline source imports. Run these commands from the repository root:
 
 ```powershell
-Set-Location D:\pilot
 python -m unittest discover -s tests -v
-python -m cf_pilot collect --config config/pilot.json
-python -m cf_pilot check --run-id pilot-001
 python -m cf_pilot collect --config config/contest.json
 python -m cf_pilot check --run-id contest-002
-python -m cf_pilot status
-```
-
-Repeat the collect command to resume an interruption or reuse the frozen cache. A run ID fixes its configuration and initial responses. For a different cohort, contests, limits or acquisition date, create a new config with a new run ID. A failed or capped job must stay visibly incomplete until resolved.
-
-## Pilot sampling
-
-The active workflow is `config/contest.json`, run `contest-002`, selection policy `standard_div2_v1`. It selects the latest completed standard CF Div. 2 contest at least seven days old, and the 20 latest earlier matching rounds within 180 days. Combined Div. 1 + Div. 2 and explicitly unrated rounds are excluded. Durations may vary and are recorded; later timing comparisons must account for duration. A supplied `target_contest_id` selects a particular mature matching round. It freezes these IDs from the first archived contest list. Selection does not use suspected behaviour, institution, nationality, rating adjustments or current profile rating.
-
-The collector downloads the complete available target submission list and its full public standings. It builds participants from submission authors, including those missing from standings, and preserves practice/virtual/out-of-competition records with explicit exclusions. Earlier contest pages are archived in full; participation facts count only eligible official submissions by the target population. Pagination continues to an empty page even if the API returns fewer than the requested page size. Each contest traversal is bounded by its first submission ID. If new practice submissions shift an offset page, the collector finds the previous boundary ID in that page, discards the repeated prefix and records the realignment. A missing anchor fails visibly rather than inferring continuity. Newer submissions added after traversal started are outside that ID-bounded snapshot.
-
-Coverage is participation in this fixed panel: regular = at least 5, limited = 1-4, none_observed = 0. A reproducible sample of up to 1,000 uses 70/20/10 group weights, redistributing shortages. Everyone remains in the population report, and each group has a recorded inclusion probability. Earlier submissions are normalized from local raw archives only for the development sample. No per-user HTTP history requests are needed. `history_complete` in a contest run means complete acquisition of this panel, not all historical account activity.
-
-Contest reports add `contest_panel.json`, `participant_coverage.csv` (every eligible target participant), and `development_sample.csv`. Sampling is by history coverage only; skill stratification and extra per-user rating history are later refinements. No-history cases are retained and do not imply new accounts. Handle changes may make historical participation harder to link; the first version does not claim complete identity resolution.
-
-### Original organisation checkpoint
-
-The user supplied `https://codeforces.com/ratings/organization/5276`. The parser reads only the main organisation rating table, excluding sidebar/global profiles. It records all discovered handles for provenance, then chooses 24 using random seed 736. Neither organisation membership nor current leaderboard rating is a model feature.
-
-The pilot chooses three completed Div. 2 contests with the most shared rated participation among the sampled handles, restricted to contests seven to 365 days old. That improves engineering coverage but is not a representative sample for estimating misconduct prevalence. Explicit `contest_ids` can override selection.
-
-Every sampled handle is queried for every selected contest, including handles absent from the final standings. Full available standings are archived. This is a targeted cohort pilot, not a contest-wide census. The later dataset needs broader contest submissions, comparison participants and evidence-backed case selection.
-
-## Collection guarantees
-
-- A SQLite rate gate serializes request starts at intervals of at least 2.1 seconds across clients sharing the database.
-- HTTP status, JSON and API status are checked. Temporary failures have bounded retries. A denial is recorded, never bypassed.
-- Raw successful response bytes are compressed and checksummed before checkpoints advance.
-- Submission IDs are unique. Adjacent pages overlap by one record and are deduplicated.
-- Interrupted collection resumes at durable page checkpoints.
-- Caps, failed pages and conflicting judging snapshots are visible and fail the collection audit.
-- The first normalized submission snapshot is retained; changed later judging fields are logged, not silently overwritten.
-- Historical pagination stops on exhaustion or after two consecutive pages older than the lookback cutoff. Because the API sorts by submission ID, this lookback stop is a documented heuristic, not proof that every historical record exists.
-- Eligible submissions are individual CONTESTANT entries in the half-open contest time window. Practice, virtual, team and ghost records are excluded. Out-of-competition records remain available for manual eligibility review.
-- Prior contest context comes only from contests that finished before the target contest started. Appending future activity cannot change that earlier context.
-
-The API can remove or alter data before it is first downloaded. This collector preserves what it received; it cannot restore records no longer available from the source.
-
-## Generated data
-
-`data/pilot.sqlite` stores jobs, requests, cohort provenance, contests, submissions, rating histories, standings, sessions and labels. `data/raw/<run_id>/` stores archived responses.
-
-`reports/<run_id>/` contains:
-
-- `data_audit.json`: collection status, counts, exclusions, coverage and conflicts.
-- `sessions.csv`: participant-contest candidates, eligibility and prior-history counts.
-- `response_manifest.json` and `.sha256`: archived response identities and checksums.
-- `labels_for_review.csv`: unknown labels with fields for evidence and review notes. Existing worksheets are never overwritten.
-
-The legacy label worksheet is preserved for earlier notes. The new evidence register supports validated imports; see FEATURES_AND_REVIEW.md. Editing either CSV does not automatically update SQLite.
-
-Exit code 0 means collection checks passed for this targeted run. Exit code 2 means a failure, incomplete pagination or integrity issue. Collection completion does not mean training readiness.
-
-## Tests and next work
-
-Offline tests cover sidebar exclusion, reproducible sampling, cache reuse, request spacing, bounded failures, page overlap, restart, checksum corruption, changing snapshots, eligibility, unknown labels and exclusion of future contest context. Temporary test databases are created and removed only within this project's work directory.
-
-Next work: audit contest population coverage, establish evidence-backed session labels and explicit presumed negatives, repeat across multiple target contests, build numerical features, freeze temporal/user partitions, and then implement supervised baselines and the RL environment. Never convert unusual timing, SKIPPED, absent standings, college membership or rating reversals directly into cheating labels.
-
-## Offline features and evidence review
-
-```powershell
 python -m cf_pilot features --run-id contest-002
 python -m cf_pilot review-export --run-id contest-002 --limit 100
-python -m cf_pilot review-import --run-id contest-002 --input reports/contest-002/evidence_register.csv
-python -m cf_pilot review-check --run-id contest-002
 ```
 
-The feature report uses a versioned predictor allowlist and checks raw integrity, official eligibility and strictly earlier panel history. Verdict statistics remain separate diagnostics. Review import defaults to validation only; --apply explicitly records reviewed evidence and updates labels. Untouched unknown rows cannot overwrite labels. Existing review files are never overwritten. Read FEATURES_AND_REVIEW.md for definitions, limitations and review requirements.
+Repeat `collect` to resume or reuse cached responses. Each run freezes its configuration; use a new run ID for a different collection. Data, reports, saved pages and browser profiles stay local and are excluded from Git.
+
+Build the browser exporter with:
+
+```powershell
+python -m tools.build_source_exporter --output work/source-exporter.html
+```
+
+See [source collection](SOURCE_COLLECTION.md) for browser export and saved-HTML import instructions, [feature and review definitions](FEATURES_AND_REVIEW.md) for evidence handling, and [the project plan](PROJECT_PLAN.md) for the RL design.
+
+## Working rules
+
+- Preserve raw responses, provenance and checksums. Report missing history explicitly.
+- Keep earlier context strictly before the target contest and fit preprocessing on training data only.
+- Review evidence for the specific participant-contest session. Unflagged accounts are not verified fair examples.
+- Do not turn unusual timing, `SKIPPED`, rating changes, source style or blog allegations directly into misconduct labels. Copying evidence alone does not establish AI use.
+- Keep label-defining evidence and administrative outcomes out of behavioural predictors.
+- Keep credentials, browser profiles, downloaded pages and collected datasets out of Git. Source collection must use access available normally.
+
+Next: verify evidence cases, define benchmark labels, freeze temporal and participant splits, then compare baselines and RL policies under the same review costs.
