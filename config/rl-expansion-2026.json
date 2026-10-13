@@ -1,0 +1,9 @@
+{
+  "source_run": "rl-expansion-2026-001",
+  "source_data": "data/rl-expansion-2026-001",
+  "study_year": 2026,
+  "catalog_key": "2e436251efaa471de207ba7d32203585f4e9e835a8cd41aab1e21a2131667769",
+  "as_of_utc": "2026-10-13T00:00:00+00:00",
+  "selection": "newest_up_to_three_finished_standard_div2_after_old_holdout_min_age_7_days",
+  "contests": []
+}

@@ -1,62 +1,49 @@
 # Codeforces Post-Contest Review Pilot
 
-An RL course project that analyses completed Codeforces contests and prioritizes suspicious submission patterns for human review. The planned comparison is Q-learning, SARSA and DQN against rules and supervised baselines.
+A reinforcement learning course project that reviews completed Codeforces contests. The agent learns which behavioural summaries to inspect, then recommends **review** or **low priority** for a participant-contest session.
 
-The current prototype collects data, builds behavioural features and supports evidence review. Model training has not started, and all misconduct labels remain unknown.
+The active experiment uses **only RL algorithms**: Q-learning, SARSA, DQN and dueling Double DQN. Validation selected dueling Double DQN. On one fresh contest it achieved **61.7% precision, 60.0% recall and 60.8% F1** against the recorded all-skipped multi-problem outcome. This is a measurable administrative-outcome proxy, not verified cheating or AI-use detection.
 
-## How we collect data
+## Data collection
 
-**Submission metadata comes from the official public API.** No API key is needed for public collection. Requests are sequential, at least 2.1 seconds apart, with caching, bounded retries, checksums and interruption/resume support. Failed or incomplete collection stays visible.
+We collect submission metadata through Codeforces' public API, which does not require an API key. Requests are sequential, three seconds apart for the new collection, with cached responses, checksums, bounded retries and resumable checkpoints. Every selected contest is collected to an empty page. Incomplete collection fails visibly.
 
-The active workflow starts with a completed standard Div. 2 contest and downloads its submissions and standings. It then collects the 20 preceding comparable contests within 180 days, finishing strictly before the target starts. Practice, virtual, team and out-of-competition records are retained separately from eligible individual contest sessions.
+The current training set contains **257,660 eligible sessions from 24 contests in 2025 and 2026**. Three later contests provide 26,956 validation sessions. Contest 2274 provides 3,371 fresh test sessions. Previously evaluated test contests are now explicitly development data. The fresh contest had finished more than a day earlier, so its administrative verdicts may still change.
 
-Participants are grouped by their participation in that earlier panel: regular (5+ contests), limited (1–4) and none observed (0). A deterministic 1,000-person development sample uses 70/20/10 group weights. The complete target population remains available for coverage checks. College and country are excluded from this strategy and model observations.
+Positive sessions have every in-window attempt marked `SKIPPED` across at least two problems. Comparison sessions attempt at least two problems and have no skipped attempt. Ambiguous patterns stay in separate tracker tables. No recorded outcome is converted into a confirmed misconduct label.
 
-**Source code is collected separately for specific evidence cases.** We currently use pages opened normally in an authenticated browser: a bookmarklet exports the loaded source and submission details, or a manually saved HTML page is imported offline. Identity checks and hashes accompany every archived source. Failed attempts are relevant, so collection is not restricted to accepted submissions.
+The model sees 24 timing, attempt-sequence and language features, revealed in groups. Handles, college, country, verdicts, judge results and administrative participation status are excluded from observations. Normalization is fitted on training data only.
 
-Playwright source collection was attempted, but automated browser startup failed in the agent environment and manual verification looped at Cloudflare in the separate browser profile. Unattended source scraping has not been validated. The existing Helium session can view sources, and the first manually saved page has been imported successfully. No challenge bypass is implemented.
+## What was feasible
 
-## Progress
-
-| Area | Current status |
-| --- | --- |
-| Contest collection | Round 1124, contest 2269, plus 20 earlier contests |
-| Population and sample | 10,344 eligible target participants; 1,000 sampled |
-| Sampled submission records | 4,286 target + 30,232 earlier = 34,518 |
-| Features and review | Timing/history features, predictor allowlist and validated evidence register |
-| Source feasibility | One saved HTML source imported; exporter corrected for plain-text submission IDs |
-| Training and evaluation | Pending reviewed labels, more target contests and frozen data splits |
-| Tests | 67 automated tests passing |
+API metadata supports automated collection and training without manual downloads. Source-code collection remains optional. Playwright verification looped at Cloudflare in a separate browser profile; normal-browser exports worked for five pilot sources. We did not establish reliable unattended source scraping. The audited public source archive had insufficient recent skipped submissions for this experiment.
 
 ## Run locally
 
-Python 3.11+ is sufficient for API collection, feature generation and offline source imports. Run these commands from the repository root:
+From the repository root, with Python and the dependencies in `requirements-rl.txt`:
 
 ```powershell
 python -m unittest discover -s tests -v
-python -m cf_pilot collect --config config/contest.json
-python -m cf_pilot check --run-id contest-002
-python -m cf_pilot features --run-id contest-002
-python -m cf_pilot review-export --run-id contest-002 --limit 100
+python tools/prepare_deep_benchmark.py
+python tools/train_deep_rl.py
+python tools/legacy_rl_comparison.py evaluate
+python tools/plot_deep_rl.py
+python tools/demo_deep_rl.py --case true_positive
+python tools/demo_deep_rl.py --case false_negative
 ```
 
-Repeat `collect` to resume or reuse cached responses. Each run freezes its configuration; use a new run ID for a different collection. Data, reports, saved pages and browser profiles stay local and are excluded from Git.
+Preparation requires the existing verified collection archives. A completed training rerun checks saved artifacts instead of retraining or retuning on the test. The demo restores actual model weights, shows the inspection actions and reveals the recorded target only after the decision. New neural training uses one CPU thread.
 
-Build the browser exporter with:
+Models are in `data/deep-rl-2026-001`; reports, learning curves and account-session predictions are in `reports/deep-rl-2026-001`. These local artifacts are excluded from Git. **117 automated tests pass.** See [the RL experiment](DEEP_RL.md) for reproducibility and limitations.
 
-```powershell
-python -m tools.build_source_exporter --output work/source-exporter.html
-```
+## Scope and working rules
 
-See [source collection](SOURCE_COLLECTION.md) for browser export and saved-HTML import instructions, [feature and review definitions](FEATURES_AND_REVIEW.md) for evidence handling, and [the project plan](PROJECT_PLAN.md) for the RL design.
+- Analyse completed contests and specific sessions. Do not label an account permanently.
+- Preserve raw snapshots, frozen splits, provenance and unknown misconduct labels.
+- Select settings on validation, then evaluate the fresh test without retuning.
+- Report precision, recall, failures and seed variation. High raw accuracy is misleading here.
+- Keep credentials, browser profiles, source exports, datasets and account lists out of Git.
 
-## Working rules
+The current result comes from one fresh contest. Recall is only 9.1% in its small out-of-competition group, so the pooled score must not stand alone. Further claims require more untouched contests and independently established evidence.
 
-- Preserve raw responses, provenance and checksums. Report missing history explicitly.
-- Keep earlier context strictly before the target contest and fit preprocessing on training data only.
-- Review evidence for the specific participant-contest session. Unflagged accounts are not verified fair examples.
-- Do not turn unusual timing, `SKIPPED`, rating changes, source style or blog allegations directly into misconduct labels. Copying evidence alone does not establish AI use.
-- Keep label-defining evidence and administrative outcomes out of behavioural predictors.
-- Keep credentials, browser profiles, downloaded pages and collected datasets out of Git. Source collection must use access available normally.
-
-Next: verify evidence cases, define benchmark labels, freeze temporal and participant splits, then compare baselines and RL policies under the same review costs.
+Earlier collection checkpoints and the historical supervised comparison remain preserved. They are not part of the active RL-only training. Background: [collection and benchmark definitions](BENCHMARK.md), [source feasibility](SOURCE_COLLECTION.md), [historical experiment](TRAINING.md), [project plan](PROJECT_PLAN.md).

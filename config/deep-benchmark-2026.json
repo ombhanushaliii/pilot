@@ -1,0 +1,42 @@
+{
+  "benchmark_id": "deep-benchmark-2026-001",
+  "splits": {
+    "train": [
+      2063,
+      2078,
+      2107,
+      2119,
+      2160,
+      2163,
+      2220,
+      2226,
+      2224,
+      2228,
+      2231,
+      2232,
+      2234,
+      2240,
+      2238,
+      2246,
+      2247,
+      2250,
+      2248,
+      2252,
+      2256,
+      2257,
+      2258,
+      2263
+    ],
+    "validation": [
+      2264,
+      2267,
+      2269
+    ],
+    "test": [
+      2274
+    ]
+  },
+  "policy": "all_skipped_multiple_problems_vs_no_skipped_v1",
+  "former_test_reclassified_as": "validation development data; no longer an untouched test",
+  "fresh_test_stability": "finished recent snapshot, administrative verdicts may change"
+}

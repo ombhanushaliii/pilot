@@ -1,0 +1,16 @@
+{
+  "run_id": "training-2026-002",
+  "benchmark_id": "benchmark-2026-001",
+  "seeds": [42, 736, 2026, 13, 2718],
+  "episodes": 500000,
+  "checkpoint_interval": 50000,
+  "alpha": 0.05,
+  "gamma": 1.0,
+  "epsilon_start": 1.0,
+  "epsilon_end": 0.05,
+  "epsilon_decay_episodes": 400000,
+  "budget": 3,
+  "inspection_cost": 0.05,
+  "rewards": {"true_positive": 20.0, "false_negative": -20.0, "true_negative": 1.0, "false_positive": -2.0},
+  "logistic_c": [0.1, 1.0, 10.0]
+}

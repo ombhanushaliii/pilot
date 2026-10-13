@@ -1,0 +1,227 @@
+{
+  "candidate_contests": 44,
+  "source": "cached contest.list, contest-002",
+  "archive_hash_verified": true,
+  "contests": [
+    {
+      "id": 2055,
+      "name": "Codeforces Round 996 (Div. 2)",
+      "start_utc": "2025-01-12T14:35:00+00:00"
+    },
+    {
+      "id": 2056,
+      "name": "Codeforces Round 997 (Div. 2)",
+      "start_utc": "2025-01-17T14:35:00+00:00"
+    },
+    {
+      "id": 2063,
+      "name": "Codeforces Round 1000 (Div. 2)",
+      "start_utc": "2025-01-22T12:05:00+00:00"
+    },
+    {
+      "id": 2059,
+      "name": "Codeforces Round 1002 (Div. 2)",
+      "start_utc": "2025-02-02T14:35:00+00:00"
+    },
+    {
+      "id": 2067,
+      "name": "Codeforces Round 1004 (Div. 2)",
+      "start_utc": "2025-02-11T14:35:00+00:00"
+    },
+    {
+      "id": 2064,
+      "name": "Codeforces Round 1005 (Div. 2)",
+      "start_utc": "2025-02-16T14:35:00+00:00"
+    },
+    {
+      "id": 2071,
+      "name": "Codeforces Round 1007 (Div. 2)",
+      "start_utc": "2025-02-28T14:35:00+00:00"
+    },
+    {
+      "id": 2078,
+      "name": "Codeforces Round 1008 (Div. 2)",
+      "start_utc": "2025-03-10T14:45:00+00:00"
+    },
+    {
+      "id": 2085,
+      "name": "Codeforces Round 1011 (Div. 2)",
+      "start_utc": "2025-03-22T14:35:00+00:00"
+    },
+    {
+      "id": 2090,
+      "name": "Codeforces Round 1012 (Div. 2)",
+      "start_utc": "2025-03-23T05:35:00+00:00"
+    },
+    {
+      "id": 2092,
+      "name": "Codeforces Round 1014 (Div. 2)",
+      "start_utc": "2025-03-29T14:35:00+00:00"
+    },
+    {
+      "id": 2103,
+      "name": "Codeforces Round 1019 (Div. 2)",
+      "start_utc": "2025-04-21T14:35:00+00:00"
+    },
+    {
+      "id": 2098,
+      "name": "Codeforces Round 1021 (Div. 2)",
+      "start_utc": "2025-04-26T08:35:00+00:00"
+    },
+    {
+      "id": 2108,
+      "name": "Codeforces Round 1022 (Div. 2)",
+      "start_utc": "2025-05-01T14:35:00+00:00"
+    },
+    {
+      "id": 2107,
+      "name": "Codeforces Round 1023 (Div. 2)",
+      "start_utc": "2025-05-05T14:35:00+00:00"
+    },
+    {
+      "id": 2102,
+      "name": "Codeforces Round 1024 (Div. 2)",
+      "start_utc": "2025-05-11T14:35:00+00:00"
+    },
+    {
+      "id": 2109,
+      "name": "Codeforces Round 1025 (Div. 2)",
+      "start_utc": "2025-05-17T14:35:00+00:00"
+    },
+    {
+      "id": 2110,
+      "name": "Codeforces Round 1026 (Div. 2)",
+      "start_utc": "2025-05-24T14:35:00+00:00"
+    },
+    {
+      "id": 2116,
+      "name": "Codeforces Round 1028 (Div. 2)",
+      "start_utc": "2025-05-31T14:35:00+00:00"
+    },
+    {
+      "id": 2118,
+      "name": "Codeforces Round 1030 (Div. 2)",
+      "start_utc": "2025-06-12T14:35:00+00:00"
+    },
+    {
+      "id": 2113,
+      "name": "Codeforces Round 1031 (Div. 2)",
+      "start_utc": "2025-06-15T09:05:00+00:00"
+    },
+    {
+      "id": 2120,
+      "name": "Codeforces Round 1033 (Div. 2) and CodeNite 2025",
+      "start_utc": "2025-06-21T14:35:00+00:00"
+    },
+    {
+      "id": 2119,
+      "name": "Codeforces Round 1035 (Div. 2)",
+      "start_utc": "2025-07-05T14:35:00+00:00"
+    },
+    {
+      "id": 2128,
+      "name": "Codeforces Round 1039 (Div. 2)",
+      "start_utc": "2025-07-27T14:35:00+00:00"
+    },
+    {
+      "id": 2130,
+      "name": "Codeforces Round 1040 (Div. 2)",
+      "start_utc": "2025-07-31T14:35:00+00:00"
+    },
+    {
+      "id": 2133,
+      "name": "Codeforces Round 1044 (Div. 2)",
+      "start_utc": "2025-08-24T14:35:00+00:00"
+    },
+    {
+      "id": 2134,
+      "name": "Codeforces Round 1045 (Div. 2)",
+      "start_utc": "2025-08-26T14:35:00+00:00"
+    },
+    {
+      "id": 2136,
+      "name": "Codeforces Round 1046 (Div. 2)",
+      "start_utc": "2025-08-28T14:35:00+00:00"
+    },
+    {
+      "id": 2139,
+      "name": "Codeforces Round 1048 (Div. 2)",
+      "start_utc": "2025-09-08T14:35:00+00:00"
+    },
+    {
+      "id": 2140,
+      "name": "Codeforces Round 1049 (Div. 2)",
+      "start_utc": "2025-09-09T14:35:00+00:00"
+    },
+    {
+      "id": 2143,
+      "name": "Codeforces Round 1051 (Div. 2)",
+      "start_utc": "2025-09-17T14:35:00+00:00"
+    },
+    {
+      "id": 2146,
+      "name": "Codeforces Round 1052 (Div. 2)",
+      "start_utc": "2025-09-21T14:35:00+00:00"
+    },
+    {
+      "id": 2151,
+      "name": "Codeforces Round 1053 (Div. 2)",
+      "start_utc": "2025-09-24T11:35:00+00:00"
+    },
+    {
+      "id": 2155,
+      "name": "Codeforces Round 1056 (Div. 2)",
+      "start_utc": "2025-10-05T16:35:00+00:00"
+    },
+    {
+      "id": 2153,
+      "name": "Codeforces Round 1057 (Div. 2)",
+      "start_utc": "2025-10-10T14:35:00+00:00"
+    },
+    {
+      "id": 2160,
+      "name": "Codeforces Round 1058 (Div. 2)",
+      "start_utc": "2025-10-12T14:35:00+00:00"
+    },
+    {
+      "id": 2154,
+      "name": "Codeforces Round 1060 (Div. 2)",
+      "start_utc": "2025-10-19T14:35:00+00:00"
+    },
+    {
+      "id": 2156,
+      "name": "Codeforces Round 1061 (Div. 2)",
+      "start_utc": "2025-10-24T14:35:00+00:00"
+    },
+    {
+      "id": 2163,
+      "name": "Codeforces Round 1063 (Div. 2)",
+      "start_utc": "2025-11-10T15:05:00+00:00"
+    },
+    {
+      "id": 2166,
+      "name": "Codeforces Round 1064 (Div. 2)",
+      "start_utc": "2025-11-16T14:35:00+00:00"
+    },
+    {
+      "id": 2158,
+      "name": "Codeforces Round 1067 (Div. 2)",
+      "start_utc": "2025-11-29T14:35:00+00:00"
+    },
+    {
+      "id": 2173,
+      "name": "Codeforces Round 1068 (Div. 2)",
+      "start_utc": "2025-12-05T14:35:00+00:00"
+    },
+    {
+      "id": 2175,
+      "name": "Codeforces Round 1069 (Div. 2)",
+      "start_utc": "2025-12-06T08:15:00+00:00"
+    },
+    {
+      "id": 2176,
+      "name": "Codeforces Round 1070 (Div. 2)",
+      "start_utc": "2025-12-11T14:35:00+00:00"
+    }
+  ]
+}

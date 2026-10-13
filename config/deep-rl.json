@@ -1,0 +1,24 @@
+{
+  "run_id": "deep-rl-2026-001",
+  "benchmark_id": "deep-benchmark-2026-001",
+  "search_seed": 42,
+  "repeat_seeds": [736, 2026],
+  "settings": {
+    "updates": 18000,
+    "validation_interval": 2000,
+    "environments": 64,
+    "batch_size": 256,
+    "replay_per_class": 50000,
+    "warmup_updates": 500,
+    "learning_rate": 0.001,
+    "target_tau": 0.01,
+    "inspection_cost": 0.005
+  },
+  "candidates": [
+    {"name": "dqn64_p025", "width": 64, "dueling": false, "double": false, "false_positive_penalty": 0.25},
+    {"name": "dueling_double64_p010", "width": 64, "dueling": true, "double": true, "false_positive_penalty": 0.1},
+    {"name": "dueling_double64_p025", "width": 64, "dueling": true, "double": true, "false_positive_penalty": 0.25},
+    {"name": "dueling_double64_p050", "width": 64, "dueling": true, "double": true, "false_positive_penalty": 0.5},
+    {"name": "dueling_double128_p025", "width": 128, "dueling": true, "double": true, "false_positive_penalty": 0.25}
+  ]
+}

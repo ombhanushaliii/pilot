@@ -1,0 +1,40 @@
+{
+  "benchmark_id": "benchmark-2026-001",
+  "source_data": "data",
+  "source_run": "contest-002",
+  "year": 2026,
+  "policy": "all_skipped_multiple_problems_vs_no_skipped_v1",
+  "selection": "complete_21_contest_cached_panel_v1",
+  "splits": {
+    "train": [
+      2220,
+      2226,
+      2224,
+      2228,
+      2231,
+      2232,
+      2234,
+      2240,
+      2238,
+      2246,
+      2247,
+      2250,
+      2248,
+      2252,
+      2256
+    ],
+    "validation": [
+      2257,
+      2258,
+      2263
+    ],
+    "test": [
+      2264,
+      2267,
+      2269
+    ]
+  },
+  "feature_version": "behaviour_only_v1",
+  "minimum_problems_both_classes": 2,
+  "misconduct_truth": false
+}
