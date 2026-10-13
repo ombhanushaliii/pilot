@@ -1,3 +1,5 @@
+> Historical record. The current scope and formal report are in [the main README](../../README.md). This document does not override the active RL-only experiment.
+
 # Feasibility and benchmark plan for archived Codeforces submissions
 
 Status: planning and bounded feasibility inspection. No model training is authorised by a successful download alone. The next deliverable is a measured go/no-go report. No manual source downloads are required.

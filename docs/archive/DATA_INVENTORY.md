@@ -1,3 +1,5 @@
+> Historical record. The current scope and formal report are in [the main README](../../README.md). This document does not override the active RL-only experiment.
+
 # Verified contest-002 inventory
 
 Verified against the saved dataset on 10 October 2026. The collection implementation is checkpointed in commit d7cc414. Generated data and reports remain local and ignored by Git.

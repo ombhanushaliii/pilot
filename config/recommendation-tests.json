@@ -1,0 +1,172 @@
+{
+  "run_id": "recommendation-tests-001",
+  "source_benchmark": "deep-benchmark-2026-001",
+  "network_requests": 0,
+  "history_last_contests": 20,
+  "history_population": "All in-window individual CONTESTANT/OUT_OF_COMPETITION sessions, regardless of outcome or problem count",
+  "history_input_columns": [
+    "attempts",
+    "attempted_problems",
+    "first_submission_fraction",
+    "last_submission_fraction",
+    "attempts_per_hour",
+    "gap_min_fraction",
+    "gap_p10_fraction",
+    "gap_median_fraction",
+    "gap_max_fraction",
+    "gap_fraction_le_15s",
+    "gap_fraction_le_60s",
+    "max_attempts_in_60s",
+    "retries",
+    "retry_fraction",
+    "retry_gap_min_fraction",
+    "retry_gap_median_fraction",
+    "retry_fraction_le_60s",
+    "largest_problem_attempt_share",
+    "problem_switch_fraction",
+    "problem_revisit_fraction",
+    "distinct_languages",
+    "language_switch_fraction",
+    "within_problem_language_switch_fraction",
+    "language_missing_fraction",
+    "history_count_log",
+    "history_recency_days_log",
+    "history_attempts_log_median",
+    "history_problems_log_median",
+    "history_first_median",
+    "history_last_median",
+    "history_gap_log_median",
+    "attempts_history_log_deviation",
+    "problems_history_log_deviation",
+    "first_history_deviation",
+    "last_history_deviation",
+    "gap_history_log_deviation",
+    "retry_history_deviation"
+  ],
+  "folds": {
+    "earlier": {
+      "train": [
+        2063,
+        2078,
+        2107,
+        2119,
+        2160,
+        2163,
+        2220,
+        2226,
+        2224,
+        2228,
+        2231,
+        2232,
+        2234,
+        2240,
+        2238,
+        2246,
+        2247,
+        2250,
+        2248,
+        2252,
+        2256
+      ],
+      "validation": [
+        2257,
+        2258,
+        2263
+      ]
+    },
+    "later": {
+      "train": [
+        2063,
+        2078,
+        2107,
+        2119,
+        2160,
+        2163,
+        2220,
+        2226,
+        2224,
+        2228,
+        2231,
+        2232,
+        2234,
+        2240,
+        2238,
+        2246,
+        2247,
+        2250,
+        2248,
+        2252,
+        2256,
+        2257,
+        2258,
+        2263
+      ],
+      "validation": [
+        2264,
+        2267,
+        2269
+      ]
+    }
+  },
+  "diagnostic_contests": [
+    2274
+  ],
+  "diagnostic_is_untouched": false,
+  "candidates": [
+    {
+      "name": "baseline",
+      "history": false,
+      "full_visible": false,
+      "cost": 0.005
+    },
+    {
+      "name": "free_inspection",
+      "history": false,
+      "full_visible": false,
+      "cost": 0.0
+    },
+    {
+      "name": "all_visible",
+      "history": false,
+      "full_visible": true,
+      "cost": 0.0
+    },
+    {
+      "name": "history",
+      "history": true,
+      "full_visible": false,
+      "cost": 0.005
+    },
+    {
+      "name": "history_all_visible",
+      "history": true,
+      "full_visible": true,
+      "cost": 0.0
+    }
+  ],
+  "settings": {
+    "updates": 18000,
+    "validation_interval": 2000,
+    "environments": 64,
+    "batch_size": 256,
+    "replay_per_class": 50000,
+    "warmup_updates": 500,
+    "learning_rate": 0.001,
+    "target_tau": 0.01,
+    "false_positive_penalty": 0.5,
+    "width": 64,
+    "search_seed": 42,
+    "repeat_seeds": [
+      736,
+      2026
+    ]
+  },
+  "checkpoint_selection": "Mean per-contest validation F1, then worst-contest F1, then pooled F1",
+  "pooled_checkpoint_control": "Also preserve best pooled-F1 weights from the identical learning run",
+  "candidate_selection": "Mean macro-contest F1 over both development folds for seed42; repeat winner and baseline; compare repeat means",
+  "representative_policy_seed": 42,
+  "initial_history_visibility": "Cached history is initially visible for history candidates; baseline uses zero history placeholders to match parameter count",
+  "all_visible_reference": "One-step contextual-bandit Q learner, with all groups initially provided and only two terminal actions",
+  "budgets": "Equal updates and transitions; episode counts differ with inspection policy",
+  "active_model_changed": false
+}

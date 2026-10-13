@@ -57,7 +57,7 @@ Historical tabular agents use six discretized summaries and an older, smaller tr
 
 ## Verification and limits
 
-117 automated tests pass, including hand-computed DQN/Double targets, terminal handling, hidden-feature invariance, invalid-action masks, replay weighting and actual learning on a controlled hidden-feature task. CSV confusion counts reproduce the saved metrics. All frozen artifacts and source fingerprints are checked. Four plots were visually inspected. Restored-model demos passed positive, false-positive and missed-positive cases; the missed-positive demo inspects all three groups before deciding low priority.
+The original neural milestone passed 117 automated tests; the complete suite later passed 131 tests. Original tests include hand-computed DQN/Double targets, terminal handling, hidden-feature invariance, invalid-action masks, replay weighting and actual learning on a controlled hidden-feature task. CSV confusion counts reproduce the saved metrics. All frozen artifacts and source fingerprints are checked. Four plots were visually inspected. Restored-model demos passed positive, false-positive and missed-positive cases; the missed-positive demo inspects all three groups before deciding low priority.
 
 A training-label-shuffled RL control ran 6,000 updates without accessing the fresh test. Genuine-validation F1 was 14.4%, below the main model's 35.5%. It has a shorter budget and retains signal after checkpoint selection, so it is a diagnostic rather than proof of no leakage or a fair main-model comparison.
 

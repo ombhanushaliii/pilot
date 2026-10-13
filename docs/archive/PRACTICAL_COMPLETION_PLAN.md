@@ -1,3 +1,5 @@
+> Historical record. The current scope and formal report are in [the main README](../../README.md). This document does not override the active RL-only experiment.
+
 # Practical completion route
 
 The detailed active plan is now [HF_BENCHMARK_PLAN.md](HF_BENCHMARK_PLAN.md). In particular, use complete API sessions to define negative outcomes and investigate ordinary resubmission-related skips. SKIPPED is not an explicit enforcement-reason label. This earlier proposal remains a record of the initial metadata-only route.

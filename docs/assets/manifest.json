@@ -1,0 +1,13 @@
+{
+  "generated_by": "tools/build_report_assets.py",
+  "code_sha256": "d5d96e757c0e018a6bb3e4786c0a6b504dcdeda9e5be32d4f23c8ed7b0e7f545",
+  "published_sha256": {
+    "rl-comparison.png": "32f5b395c115205cdf4013c9f3ad9696b05796f78017c3979454470237c04b0b",
+    "confusion-matrix.png": "a9bdcd8cbf281218cc3c799ffa68cd1317f156b8099c770903d7291cd85133d8",
+    "learning-progress.png": "892d86942a8c3f65c99dbf644eacd6054f5fd1d2376088daa790f9a1d0aefb97",
+    "learning-progress.svg": "879f1299d88437edc1ac7991f01d341845b709b3ef5ce373a7ecec179014728e",
+    "results-summary.json": "5064f5a57796be970813770b939e89d2c387eaef74f2e3aa9b0e6d1ff407cd8b"
+  },
+  "no_fitting": true,
+  "no_collection": true
+}

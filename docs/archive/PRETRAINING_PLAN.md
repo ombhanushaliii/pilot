@@ -1,3 +1,5 @@
+> Historical record. The current scope and formal report are in [the main README](../../README.md). This document does not override the active RL-only experiment.
+
 # Next milestone: reviewable evidence and tested features
 
 ## Decision

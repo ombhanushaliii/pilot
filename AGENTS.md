@@ -14,5 +14,5 @@ This is a reinforcement learning course mini project for post-contest Codeforces
 - The user authorized an automated 2026 recorded-outcome benchmark without manual source review. Training may use explicitly named outcome proxy targets after eligibility, split and leakage audits. Such targets are separate from unknown misconduct labels and do not validate cheating or AI-use accuracy. Preserve the older 2025 and contest-002 checkpoints.
 - Record concrete completed work and unresolved issues in STATUS.md. Do not claim tests or live checks that were not run.
 
-- The active project strictly uses RL algorithms: Q-learning, SARSA, DQN and dueling Double DQN. Read DEEP_RL.md before continuing model work. Preserve historical classifier artifacts, but do not add supervised models to the active comparison.
+- The active project strictly uses RL algorithms: Q-learning, SARSA, DQN and dueling Double DQN. Read docs/DEEP_RL.md before continuing model work. Preserve historical classifier artifacts, but do not add supervised models to the active comparison.
 - deep-rl-2026-001 fresh test contest 2274 has now been evaluated. Do not claim it is untouched in subsequent tuning. Previously tested 2264/2267/2269 are explicitly validation development data. Recent administrative outcomes may change.

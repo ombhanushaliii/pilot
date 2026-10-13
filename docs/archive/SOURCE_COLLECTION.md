@@ -1,3 +1,5 @@
+> Historical record. The current scope and formal report are in [the main README](../../README.md). This document does not override the active RL-only experiment.
+
 # Playwright source feasibility
 
 Source acquisition is a separate optional workflow. It never modifies the public API SQLite database, feature matrices or reviewed labels. Source artifacts support later independent review, not automatic cheating classifications.

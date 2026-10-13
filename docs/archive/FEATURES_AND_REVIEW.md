@@ -1,3 +1,5 @@
+> Historical record. The current scope and formal report are in [the main README](../../README.md). This document does not override the active RL-only experiment.
+
 # Features and evidence workflow
 
 This milestone builds offline, post-contest development data. It does not train a model, generate misconduct labels or establish that anomalous timing identifies AI use.

@@ -1,4 +1,6 @@
-> Historical experiment. The active RL-only model and fresh evaluation are documented in [DEEP_RL.md](DEEP_RL.md). The earlier test contests below are now development data in the new version.
+> Historical record. The current scope and formal report are in [the main README](../../README.md). This document does not override the active RL-only experiment.
+
+> Historical experiment. The active RL-only model and fresh evaluation are documented in [DEEP_RL.md](../DEEP_RL.md). The earlier test contests below are now development data in the new version.
 
 # Recorded outcome training experiment
 

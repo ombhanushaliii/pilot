@@ -1,0 +1,166 @@
+{
+  "scope": "Recorded all-skipped multi-problem outcome; not confirmed misconduct or AI use",
+  "run_id": "deep-rl-2026-001",
+  "selected": "dueling_double64_p050_42",
+  "selected_update": 12000,
+  "population": {
+    "training_sessions": 257660,
+    "validation_sessions": 26956,
+    "test_sessions": 3371
+  },
+  "selected_validation": {
+    "sessions": 26956,
+    "positives": 768,
+    "confusion": {
+      "tn": 25422,
+      "fp": 766,
+      "fn": 437,
+      "tp": 331
+    },
+    "precision": 0.3017319963536919,
+    "recall": 0.4309895833333333,
+    "f1": 0.35495978552278823,
+    "accuracy": 0.9553717168719394,
+    "balanced_accuracy": 0.7008697725739524,
+    "referral_rate": 0.040695948953850716,
+    "average_inspections": 1.3865558688232675
+  },
+  "selected_original_test": {
+    "all": {
+      "sessions": 3371,
+      "positives": 110,
+      "confusion": {
+        "tn": 3220,
+        "fp": 41,
+        "fn": 44,
+        "tp": 66
+      },
+      "precision": 0.616822429906542,
+      "recall": 0.6,
+      "f1": 0.608294930875576,
+      "accuracy": 0.9747849302877485,
+      "balanced_accuracy": 0.7937135847899417,
+      "referral_rate": 0.03174132304954019,
+      "average_inspections": 1.3476713141501038
+    },
+    "unseen_in_train_and_validation": {
+      "sessions": 708,
+      "positives": 80,
+      "confusion": {
+        "tn": 605,
+        "fp": 23,
+        "fn": 26,
+        "tp": 54
+      },
+      "precision": 0.7012987012987013,
+      "recall": 0.675,
+      "f1": 0.6878980891719745,
+      "accuracy": 0.9307909604519774,
+      "balanced_accuracy": 0.819187898089172,
+      "referral_rate": 0.10875706214689265,
+      "average_inspections": 1.4166666666666667
+    },
+    "participation:CONTESTANT": {
+      "sessions": 3349,
+      "positives": 88,
+      "confusion": {
+        "tn": 3220,
+        "fp": 41,
+        "fn": 24,
+        "tp": 64
+      },
+      "precision": 0.6095238095238096,
+      "recall": 0.7272727272727273,
+      "f1": 0.6632124352331606,
+      "accuracy": 0.9805912212600776,
+      "balanced_accuracy": 0.8573499484263054,
+      "referral_rate": 0.03135264257987459,
+      "average_inspections": 1.3460734547626156
+    },
+    "participation:OUT_OF_COMPETITION": {
+      "sessions": 22,
+      "positives": 22,
+      "confusion": {
+        "tn": 0,
+        "fp": 0,
+        "fn": 20,
+        "tp": 2
+      },
+      "precision": 1.0,
+      "recall": 0.09090909090909091,
+      "f1": 0.16666666666666669,
+      "accuracy": 0.09090909090909091,
+      "balanced_accuracy": null,
+      "referral_rate": 0.09090909090909091,
+      "average_inspections": 1.5909090909090908
+    }
+  },
+  "repeat_seed_aggregate": {
+    "precision": {
+      "mean": 0.7073564078442199,
+      "std": 0.0951040362885018
+    },
+    "recall": {
+      "mean": 0.5272727272727272,
+      "std": 0.07272727272727272
+    },
+    "f1": {
+      "mean": 0.596908849714279,
+      "std": 0.013916665318686018
+    },
+    "average_inspections": {
+      "mean": 1.0412340551765056,
+      "std": 0.34019226443563216
+    }
+  },
+  "tabular_original_test_seed_aggregate": {
+    "q_learning": {
+      "precision": {
+        "mean": 0.47251846730704017,
+        "std": 0.038499497654248815
+      },
+      "recall": {
+        "mean": 0.6381818181818182,
+        "std": 0.043313197271169446
+      },
+      "f1": {
+        "mean": 0.5417465948469928,
+        "std": 0.028238703171007063
+      },
+      "average_inspections": {
+        "mean": 0.8951646395728272,
+        "std": 0.5189612206293787
+      }
+    },
+    "sarsa": {
+      "precision": {
+        "mean": 0.47277795920601323,
+        "std": 0.0735332311483035
+      },
+      "recall": {
+        "mean": 0.6309090909090909,
+        "std": 0.05947428085016774
+      },
+      "f1": {
+        "mean": 0.5371317819546422,
+        "std": 0.05263049470616622
+      },
+      "average_inspections": {
+        "mean": 0.522871551468407,
+        "std": 0.3249825646240483
+      }
+    }
+  },
+  "total_selected_test_inspections": 4543,
+  "selected_test_total_return": -21.215,
+  "selected_test_mean_return": -0.006293384752299021,
+  "selected_test_mean_actions": 2.3476713141501038,
+  "always_low_test_mean_return": -0.03263126668644319,
+  "source_sha256": {
+    "results.json": "1816cb55352954caf64e65ca360ada5395c468a3c7d7fb4cd4b577d66c25df2d",
+    "learning-curves.json": "27680360e0bf983f8ce0aa6d7a97e79d7aa0608665caeeef84e4b1b53b6fdca0",
+    "fresh-test-predictions.csv": "b589eb895ba97d08ca3ab782a53794f368e8dffdbf3021c4ee9af1e42a0c58ab",
+    "legacy-rl-fresh-test.json": "19381e2e066507bff8d0ac671eedd73afab78e4540806a348e43793c68a5ca44"
+  },
+  "aggregate_only": true
+}
