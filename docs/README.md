@@ -4,6 +4,7 @@ Start with the [formal project report](../README.md) for the complete course ass
 
 | Document | Purpose |
 | --- | --- |
+| [PORTAL.md](PORTAL.md) | Start the local UI, run real model checks, and inspect the saved contest review queue. |
 | [DEEP_RL.md](DEEP_RL.md) | Exact original RL environment, training design, selected policy and test limitations. |
 | [BENCHMARK.md](BENCHMARK.md) | Outcome rules, feature separation and the earlier benchmark. The expanded populations are documented in the main report. |
 | [RECOMMENDATION_TESTS.md](RECOMMENDATION_TESTS.md) | Corrected enhancement trials, modest development gain and reasons for retaining the original model. |

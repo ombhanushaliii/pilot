@@ -309,7 +309,7 @@ A first enhancement run exposed a derived timing feature before its inspection. 
 
 ### 4.5 Verification and limitations
 
-The full automated suite contains **131 passing tests** from the latest completed model-development checks. It covers collection completeness, session joins, target rules, chronological separation, training-only preprocessing, hidden-feature invariance, action masks, hand-calculated Q-learning/SARSA/DQN targets, terminal transitions, replay weighting and actual reward-based learning on controlled fixtures. Saved-model inference and CSV confusion counts reproduce recorded results. Artifact hashes preserve the original weights and source snapshots.
+The full automated suite passed **135 tests** after adding the review portal. It covers collection completeness, session joins, target rules, chronological separation, training-only preprocessing, hidden-feature invariance, action masks, hand-calculated Q-learning/SARSA/DQN targets, terminal transitions, replay weighting and actual reward-based learning on controlled fixtures. Saved-model inference and CSV confusion counts reproduce recorded results. Artifact hashes preserve the original weights and source snapshots.
 
 A shuffled-training-target RL control achieved validation F1 **14.4%**, below 35.5%. It ran only 6,000 updates and used validation checkpoint selection. This is a limited diagnostic, not proof that leakage is impossible or a matched-budget model comparison.
 
@@ -339,6 +339,16 @@ The project implements and evaluates four RL approaches for a finite post-contes
 4. Codeforces. [API documentation](https://codeforces.com/apiHelp), [methods](https://codeforces.com/apiHelp/methods) and [return objects](https://codeforces.com/apiHelp/objects). Data access and schema.
 5. PyTorch. [Reinforcement Learning DQN tutorial](https://docs.pytorch.org/tutorials/intermediate/reinforcement_q_learning.html). Implementation background; the project uses its own finite simulator.
 6. Project evidence: `deep-benchmark-2026-001`, `deep-rl-2026-001` and `recommendation-tests-002`, with frozen configurations, checksums, recorded results and learning curves.
+
+## Local review portal
+
+The browser demo shows real cached submissions from contest 2274. Browse sessions, run the saved model once, and inspect the resulting 107-session review queue and action traces.
+
+```powershell
+python tools/serve_portal.py
+```
+
+Open **http://127.0.0.1:8765**. The demo requires the existing local data and weights. It performs inference only, with no collection or training. See [portal instructions](docs/PORTAL.md).
 
 ## Appendix A. Run and demonstrate
 
