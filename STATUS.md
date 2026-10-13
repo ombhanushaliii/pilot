@@ -1,5 +1,15 @@
 # Current checkpoint
 
+## Public API portal
+
+The remote portal now loads completed Codeforces contests from the public API rather than packaging a fixed snapshot. The app-level access-code gate was removed at the user's request; Vercel deployment protection settings were not changed. Round 1127 is contest 2274. The deployment exports only the unchanged policy weights and training preprocessor; inference remains on the server, with no training or frozen-data replacement.
+
+Collection pages through the full contest response, filters individual in-window official/out-of-competition submissions, exposes single-problem sessions without scoring, and computes the original allowlisted features. Upstream failures never substitute cached local research data or score an incomplete contest. Snapshot fingerprints reject stale review/detail requests. Summary/detail separation keeps payloads small; warm-process caching, collection time/size limits and scope limitations are documented in docs/PORTAL.md.
+
+Verification: 140 unit tests passed, including pagination, scope, verdict invariance, failure handling and rejecting pre-2025 contests before submission downloads. Build parity matched every saved PyTorch action and decision for all 3,371 frozen sessions. Local and deployed live API checks of contest 2274 returned 4,184 individual sessions, 3,408 sessions with at least two attempted problems, 17,931 in-window submissions and 107 model referrals. The live population differs from the frozen labelled benchmark and these counts are not new accuracy metrics.
+
+Deployed at https://pilot-review-five.vercel.app/?contest=2274. Headless Edge verified public API loading without a password, real server inference, the flagged queue, submission links, excluded single-problem sessions, invalid input and a 390px mobile viewport without page overflow, with zero JavaScript errors. The upstream API did not serve old contest 1127 during the negative check; the UI displayed that failure and disabled review without retaining the prior contest. The deployment-specific handler naming conflict was fixed, and stale snapshot UI labels were removed. No training, frozen-dataset modification, commit or push occurred.
+
 ## Completed experiments
 
 The original RL-only run `deep-rl-2026-001` remains the presentation model. Validation selected `dueling_double64_p050_42` at update 12,000. Original test contest 2274 contains 3,371 eligible sessions and 110 proxy positives. Precision is 61.68%, recall 60.00%, F1 60.83%; confusion counts are TN 3,220, FP 41, FN 44, TP 66. The small OUT_OF_COMPETITION group has only 9.09% recall.

@@ -30,3 +30,22 @@ This is a benchmark-eligible session directory, **not an official ranklist**. Th
 The contest has already been evaluated, so this is a saved-model demonstration rather than a new generalization test. Recorded submission verdicts are visible to the reviewer but excluded from the model's observations. Review priority does not establish cheating or AI use. The known model output is 107 referrals, including 66 proxy positives and 41 comparison sessions, with 44 missed proxy positives.
 
 The UI uses local HTML, CSS and JavaScript. The server uses the Python standard library plus the existing RL dependencies. There is no frontend framework, external font download, browser scraping or build step. The service binds only to localhost.
+
+## Remote demo on Vercel
+
+The public portal is deployed at [pilot-review-five.vercel.app](https://pilot-review-five.vercel.app). Paste a completed Codeforces contest URL or contest ID, choose **Load contest**, then **Run review**. No portal password or Codeforces API key is required. Round 1127 uses [contest 2274](https://codeforces.com/contest/2274); [open it directly in the portal](https://pilot-review-five.vercel.app/?contest=2274).
+
+The Vercel backend calls `contest.standings` and pages through `contest.status` sequentially, with at least 2.1 seconds between request starts on each server instance. It filters to individual official and out-of-competition submissions created during the actual contest window. Practice, virtual and team sessions are excluded. Single-problem sessions remain visible as outside model scope; sessions with at least two attempted problems are scored. Verdicts are shown in the inspector but never enter the model. Live scope includes ambiguous administrative outcomes, so the scored population can differ from the historical outcome-labelled benchmark.
+
+Behavioural features use the unchanged training-fitted preprocessor and saved dueling Double DQN weights. No fitting occurs on the website. Summary responses omit submission detail lists; the inspector fetches a selected participant's details separately to stay within serverless response limits. A snapshot fingerprint prevents applying decisions to a changed collection. Fetch errors, incomplete collection, unfinished contests and pre-2025 contests produce visible errors; there is no bundled-contest fallback.
+
+The backend keeps up to three fetched contests for ten minutes in a warm process. Cold or different server instances may fetch again, so this is not a global cache or a global API rate limiter. Collection is bounded to 150,000 returned submissions and a 43-second collection budget. Larger or slow contests fail rather than being silently truncated. Vercel responses are capped below its function payload limit. Administrative verdicts can change after a contest, and live results are not a new accuracy evaluation.
+
+Rebuild with `python tools/build_vercel_deploy.py`. It checks exact decision and action-trace parity with the original PyTorch model on all 3,371 frozen test sessions, then exports only weights, training normalization settings, code and web assets. No contest snapshot, feature matrix, raw database, training partitions or targets are packaged. The build preserves the staging project's Vercel link.
+
+```powershell
+Set-Location .\work\vercel-deploy
+vercel deploy --prod --yes
+```
+
+Review results remain in the open browser page. Vercel executes actual inference when **Run review** is clicked. The trained model files remain on the backend. Vercel's project-level deployment protection settings are unchanged.

@@ -1,0 +1,10 @@
+.contest-loader {display:flex; align-items:center; gap:14px; padding:18px 0; border-bottom:1px solid var(--rule); margin-bottom:30px}
+.contest-loader label {font-size:12px; letter-spacing:1px; color:var(--muted)}
+.contest-loader input {flex:1; max-width:430px; min-width:120px; height:44px; padding:0 14px; border:1px solid var(--rule); border-radius:3px; background:var(--white); color:var(--ink); font:inherit; font-size:15px}
+.contest-loader button {height:44px; padding:0 18px; border:1px solid var(--ink); border-radius:3px; background:var(--ink); color:var(--paper); font:inherit; cursor:pointer; white-space:nowrap}
+.contest-loader button:disabled {opacity:.5; cursor:wait}
+.contest-loader button span {margin-left:12px}
+#load-status {font-size:13px; color:var(--muted)}
+.status.insufficient {color:#70796d; background:#f0f1ea}
+@media(max-width:800px) {.contest-loader {flex-wrap:wrap; gap:10px} .contest-loader label {flex-basis:100%} .contest-loader input {flex:1 1 100%; width:100%; min-width:0; max-width:none} #load-status {flex-basis:100%}}
+@media(max-width:560px) {.contest-heading {flex-direction:column; align-items:flex-start} .contest-heading>div {max-width:100%} .heading-action {align-items:flex-start; margin-top:12px} .contest-heading h1 {overflow-wrap:anywhere}}

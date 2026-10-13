@@ -6,3 +6,6 @@ reports/
 *.sqlite*
 .pytest_cache/
 work/
+
+.vercel
+.env*.local

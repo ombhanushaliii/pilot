@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#202923">
+  <title>Pilot / Contest review</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/remote.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <aside class="rail" aria-label="Contest review">
+    <a class="mark" href="/" aria-label="Pilot home">p<span>.</span></a>
+    <div class="rail-rule"></div>
+    <div class="rail-selected" title="Contest review"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM9 5v14M5 10h14M5 14h14"/></svg></div>
+    <span class="rail-label">REVIEW</span>
+    <span class="rail-bottom">01</span>
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <div class="brand">Pilot <span>/</span> <span class="topbar-muted">Contest review</span></div>
+      <div class="topbar-right"><button class="icon-button help-button" id="about-button" aria-label="About this review">?</button></div>
+    </header>
+    <main>
+      <form class="contest-loader" id="contest-form">
+        <label for="contest-input">CONTEST</label>
+        <input id="contest-input" name="contest" value="https://codeforces.com/contest/2274" placeholder="Codeforces contest URL or ID" aria-label="Codeforces contest URL or ID" required>
+        <button id="load-button" type="submit">Load contest <span aria-hidden="true">↗</span></button>
+        <span id="load-status">Completed contests · public API</span>
+      </form>
+      <section class="contest-heading">
+        <div><div class="eyebrow">CODEFORCES <span class="eyebrow-slash">/</span> POST-CONTEST</div><h1 id="contest-title">Choose a contest.</h1><p class="contest-meta" id="contest-meta">Load its submissions, then run the policy.</p></div>
+        <div class="heading-action"><span class="model-ready" id="model-status"><span class="local-dot"></span> Saved policy</span><button class="run-button" id="run-button" disabled><span id="run-label">Run review</span><span id="run-icon" aria-hidden="true">↗</span></button></div>
+      </section>
+      <section class="summary" aria-label="Contest summary">
+        <div class="summary-item"><span class="summary-number" id="participant-count">—</span><span class="summary-label">Participants <span class="summary-note">with in-contest submissions</span></span></div>
+        <div class="summary-item"><span class="summary-number" id="submission-count">—</span><span class="summary-label">Submissions <span class="summary-note">during the contest</span></span></div>
+        <div class="summary-item summary-result"><span class="summary-number" id="flag-count">—</span><span class="summary-label" id="flag-label">Awaiting review <span class="summary-note">one pass, saved model</span></span><div class="review-stamp" id="review-stamp" hidden>COMPLETE</div></div>
+      </section>
+      <div class="notice" id="notice" role="status" hidden></div>
+      <section class="review-layout">
+        <div class="roster">
+          <div class="roster-toolbar">
+            <div class="tabs" role="tablist" aria-label="Review queue">
+              <button class="tab active" role="tab" aria-selected="true" data-filter="all">All <span id="all-tab-count">0</span></button>
+              <button class="tab" role="tab" aria-selected="false" data-filter="review" disabled>Flagged <span id="review-tab-count">—</span></button>
+              <button class="tab" role="tab" aria-selected="false" data-filter="low_priority" disabled>Low priority <span id="low-tab-count">—</span></button>
+            </div>
+            <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input id="search-input" type="search" placeholder="Find a participant" aria-label="Find a participant" autocomplete="off"></label>
+          </div>
+          <div class="list-description"><span id="queue-title">PARTICIPANT DIRECTORY</span><span id="queue-note">Select a session to inspect</span></div>
+          <div class="table-scroll"><table><thead><tr><th class="number-col" title="Directory position, not official contest rank">№</th><th>Participant</th><th class="numeric">Problems</th><th class="numeric">Attempts</th><th class="time-col">Last attempt</th><th>Review</th></tr></thead><tbody id="participant-rows"><tr><td colspan="6" class="empty">Load a contest to see its participants.</td></tr></tbody></table></div>
+          <div class="pagination"><span id="page-label">—</span><div><button id="prev-button" class="page-button" aria-label="Previous page" disabled>←</button><button id="next-button" class="page-button" aria-label="Next page" disabled>→</button></div></div>
+        </div>
+        <aside class="inspector" aria-label="Selected participant" id="inspector"><div class="inspector-empty"><span class="detail-eyebrow">SESSION INSPECTOR</span><h2>Look closer.</h2><p>Select a participant to see their submission trail and the policy's review decision.</p><div class="empty-rule"></div><span class="mono">Codeforces API · completed contests</span></div></aside>
+      </section>
+      <footer><span><span class="footer-square"></span> Codeforces API <span class="footer-separator">/</span> Completed contests</span><span>Review priority, not a misconduct finding.</span></footer>
+    </main>
+  </div>
+  <dialog id="about-dialog" aria-labelledby="about-title">
+    <div class="dialog-heading"><span class="eyebrow">ABOUT THIS REVIEW</span><button class="icon-button" id="close-dialog" aria-label="Close information">×</button></div>
+    <h2 id="about-title">A second look,<br>after the contest.</h2>
+    <p>Pilot uses a saved reinforcement learning policy to choose behavioural evidence to inspect, then recommends review or low priority for a completed session.</p>
+    <dl class="about-facts"><div><dt>Policy</dt><dd>Dueling Double DQN · checkpoint 12,000 · server inference</dd></div><div><dt>Evidence</dt><dd>Timing, retries, problem sequence and language changes</dd></div><div><dt>Scope</dt><dd>Completed contests from 2025 onward. Individual official and out-of-competition sessions with at least two attempted problems receive decisions.</dd></div><div><dt>Data</dt><dd>Fetched from the Codeforces API. Temporarily cached for ten minutes on a warm server instance. A cold server may fetch again.</dd></div><div><dt>Directory</dt><dd>Alphabetical before review, flagged sessions first afterwards. Positions are not official contest ranks.</dd></div></dl>
+    <p class="about-limits">Recorded verdicts are shown for inspection but never enter the model. A flag does not establish cheating or AI use.</p>
+    <a class="plain-link" id="contest-link" href="https://codeforces.com/contest/2274" target="_blank" rel="noreferrer">Open the contest on Codeforces ↗</a>
+  </dialog>
+</body>
+</html>
