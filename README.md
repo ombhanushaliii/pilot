@@ -1,12 +1,6 @@
-# Reinforcement Learning for Post Contest Codeforces Review
+# Reinforcement Learning for Post Contest Codeforces Review (pilot)
 
-**Course:** 216U01E736 Reinforcement Learning, Semester VII
-
-**Assessment:** LAB CA mini project, academic year 2026 to 2027
-
-**Experiment date:** 13 October 2026
-
-**Repository:** [ombhanushaliii/pilot](https://github.com/ombhanushaliii/pilot)
+This is a pilot on how RL algorithms can be used to flag suspicious user behaviours in online coding contests for a human review.
 
 This project implements a reinforcement learning agent that reviews completed Codeforces participant-contest sessions. It decides which behavioural summaries to inspect and then recommends **REVIEW** or **LOW_PRIORITY**. The active comparison includes Q-learning, SARSA, DQN and dueling Double DQN. Validation selected dueling Double DQN; its original test result was **61.7% precision, 60.0% recall and 60.8% F1**.
 
